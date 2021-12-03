@@ -79,4 +79,27 @@ void main() {
         find.byKey(const Key('circle_progress_indicator'));
     expect(circularIndicator, findsOneWidget);
   });
+
+  testWidgets('added text field trigger bloc event', (tester) async {
+    await tester.pumpWidget(testingWidget!);
+
+    final mutableTextField = find.byKey(const Key('mutable_text_field'));
+    expect(mutableTextField, findsOneWidget);
+
+    await tester.enterText(mutableTextField, 'the text');
+    await tester.pump();
+    verify(() => textFieldBloc.add(TextFieldValueChanged('the text')));
+  });
+
+  testWidgets('text field text corresponds to value', (tester) async {
+    when(() => textFieldBloc.stream).thenAnswer(
+      (_) => Stream.fromIterable([
+        TextFieldChangedSuccess('the text'),
+      ]),
+    );
+    await tester.pumpWidget(testingWidget!);
+    await tester.pump(); //times needs to advance
+
+    expect(find.text('the text'), findsOneWidget);
+  });
 }
