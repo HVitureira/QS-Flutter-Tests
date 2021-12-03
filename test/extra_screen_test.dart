@@ -70,19 +70,10 @@ void main() {
   });
 
   testWidgets('progress indicator shows', (tester) async {
-    when(() => postsBloc.stream)
-        .thenAnswer((_) => Stream.fromIterable([PostsFetchInProgress()]));
-    await tester.pumpWidget(testingWidget!);
-    await tester.pump(); //times needs to advance
-
-    final circularIndicator =
-        find.byKey(const Key('circle_progress_indicator'));
-    expect(circularIndicator, findsOneWidget);
+    /*ASK CLASS*/
   });
 
   testWidgets('added text field trigger bloc event', (tester) async {
-    when(() => postsBloc.state).thenReturn(PostsInitial());
-    when(() => textFieldBloc.state).thenReturn(TextFieldInitial());
     await tester.pumpWidget(testingWidget!);
 
     final mutableTextField = find.byKey(const Key('mutable_text_field'));
@@ -94,12 +85,9 @@ void main() {
   });
 
   testWidgets('text field text corresponds to value', (tester) async {
-    when(() => postsBloc.state).thenReturn(PostsInitial());
     when(() => textFieldBloc.state)
         .thenReturn(TextFieldChangedSuccess('the text'));
     await tester.pumpWidget(testingWidget!);
-    await tester.pump(); //times needs to advance
-
     expect(find.text('the text'), findsOneWidget);
   });
 }
