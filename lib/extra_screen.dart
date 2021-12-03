@@ -46,6 +46,31 @@ class _ExtraScreenState extends State<ExtraScreen> {
                     ],
                   ),
                 ),
+                Column(
+                  children: [
+                    TextField(
+                      key: const Key('mutable_text_field'),
+                      onChanged: (text) =>
+                          BlocProvider.of<TextFieldBloc>(context).add(
+                        TextFieldValueChanged(text),
+                      ),
+                    ),
+                    BlocBuilder<TextFieldBloc, TextFieldState>(
+                      builder: (context, state) {
+                        return TextField(
+                          key: const Key('static_text_field'),
+                          readOnly: true,
+                          decoration: InputDecoration(
+                            hintText: state is TextFieldChangedSuccess
+                                ? state.text
+                                : '',
+                          ),
+                        );
+                      },
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 50),
                 BlocBuilder<PostsBloc, PostsState>(
                   builder: (context, state) {
                     if (state is PostsFetchInProgress) {
@@ -76,30 +101,7 @@ class _ExtraScreenState extends State<ExtraScreen> {
                         }),
                       );
                     }
-                    return Column(
-                      children: [
-                        TextField(
-                          key: const Key('mutable_text_field'),
-                          onChanged: (text) =>
-                              BlocProvider.of<TextFieldBloc>(context).add(
-                            TextFieldValueChanged(text),
-                          ),
-                        ),
-                        BlocBuilder<TextFieldBloc, TextFieldState>(
-                          builder: (context, state) {
-                            return TextField(
-                              key: const Key('static_text_field'),
-                              readOnly: true,
-                              decoration: InputDecoration(
-                                hintText: state is TextFieldChangedSuccess
-                                    ? state.text
-                                    : '',
-                              ),
-                            );
-                          },
-                        ),
-                      ],
-                    );
+                    return Container();
                   },
                 )
               ],

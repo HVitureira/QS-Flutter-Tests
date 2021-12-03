@@ -81,6 +81,8 @@ void main() {
   });
 
   testWidgets('added text field trigger bloc event', (tester) async {
+    when(() => postsBloc.state).thenReturn(PostsInitial());
+    when(() => textFieldBloc.state).thenReturn(TextFieldInitial());
     await tester.pumpWidget(testingWidget!);
 
     final mutableTextField = find.byKey(const Key('mutable_text_field'));
@@ -92,11 +94,9 @@ void main() {
   });
 
   testWidgets('text field text corresponds to value', (tester) async {
-    when(() => textFieldBloc.stream).thenAnswer(
-      (_) => Stream.fromIterable([
-        TextFieldChangedSuccess('the text'),
-      ]),
-    );
+    when(() => postsBloc.state).thenReturn(PostsInitial());
+    when(() => textFieldBloc.state)
+        .thenReturn(TextFieldChangedSuccess('the text'));
     await tester.pumpWidget(testingWidget!);
     await tester.pump(); //times needs to advance
 
